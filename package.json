@@ -1,0 +1,27 @@
+{
+  "name": "dev-job-analysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Demonico/dev-job-analysis.git"
+  },
+  "keywords": [],
+  "author": "Jarrod Van Doren",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Demonico/dev-job-analysis/issues"
+  },
+  "homepage": "https://github.com/Demonico/dev-job-analysis#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.9"
+  }
+}
