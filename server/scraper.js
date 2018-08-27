@@ -15,7 +15,7 @@ mongoose.connect(
 const scraper = {
   // Scrape Job List Page
   wwrDevJobList(url) {
-    axios
+    return axios
       .get(url)
       .then(res => {
         // console.log(res.data)
@@ -34,7 +34,7 @@ const scraper = {
 
     // -- Description (keep html for now)
     // -- How to apply
-    axios
+    return axios
       .get(url)
       .then(res => {
         let job = {}
@@ -43,18 +43,73 @@ const scraper = {
         // -- Title
         job.title = header.children('h1').text()
         // -- Company Name
-        job.company =  header.children('h2').children('.company').text()
+        job.company = header
+          .children('h2')
+          .children('.company')
+          .text()
         // -- HQ (if available)
-        job.hq =  header.children('h2').children('.location').text()
+        job.hq = header
+          .children('h2')
+          .children('.location')
+          .text()
 
-        
         let desc = $('.listing-container')
         job.description = desc.html()
 
         let apply = $('.apply>p')
         job.apply = apply.html()
 
-        console.log(job)
+        // connect to Mongo
+      })
+      .catch(err => console.log(err))
+  },
+
+  soJobs(url) {
+    return axios
+      .get(url)
+      .then(res => {
+        // console.log(res.data)
+        let $ = cheerio.load(res.data, { xmlMode: true })
+        let jobs = []
+
+        $('item').each(function(i, elem) {
+          let dataToAdd = {
+            categories: []
+          }
+          dataToAdd.title = $(elem)
+            .children('title')
+            .text()
+            .trim()
+          dataToAdd.description = $(elem)
+            .children('description')
+            .text()
+            .trim()
+          dataToAdd.guid = $(elem)
+            .children('guid')
+            .text()
+            .trim()
+          dataToAdd.link = $(elem)
+            .children('link')
+            .text()
+            .trim()
+          dataToAdd.pubDate = $(elem)
+            .children('pubDate')
+            .text()
+            .trim()
+          dataToAdd.company = $(elem)
+            .find('a10\\:name')
+            .text()
+          // dataToAdd.categories = $(elem).children('category')
+          $(elem)
+            .children('category')
+            .each(function(j, catElem) {
+              dataToAdd.categories.push($(catElem).text())
+            })
+
+          // console.log(dataToAdd)    
+          jobs.push(dataToAdd)    
+        })
+        return jobs
       })
       .catch(err => console.log(err))
   }
@@ -63,8 +118,11 @@ const scraper = {
   // add to job model
 }
 
-scraper.wwrJobPage('https://weworkremotely.com/remote-jobs/pixelcabin-junior-front-end-developer-1')
-// module.exports = scraper
+// scraper.soJobs('https://stackoverflow.com/jobs/feed?r=true')
+// scraper.wwrJobPage(
+//   'https://weworkremotely.com/remote-jobs/pixelcabin-junior-front-end-developer-1'
+// )
+module.exports = scraper
 
 // scrapeRSS('https://weworkremotely.com/categories/remote-programming-jobs.rss')
 // scraper.wwrDevJobList('https://weworkremotely.com/categories/remote-programming-jobs')

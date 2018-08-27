@@ -10,7 +10,11 @@ const JobSchema = new Schema({
   description: { type: String },
   apply: { type: String },
   link: { type: String },
-  // pubDate: { type: String }
+  guid: {
+    type: String,
+    unique: { index: { unique: true } }
+  },
+  pubDate: { type: String }
 })
 
 const Job = mongoose.model('Job', JobSchema)
