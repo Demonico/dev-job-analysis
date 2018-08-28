@@ -18,9 +18,10 @@ app.use(express.static(path.join(__dirname, '/client/public')))
 mongoose.connect('mongodb://localhost/devjobs')
 
 // Add Routes
-app.get('/', (req, res) => {
-  res.sendFile('../client/public/index.html')
-})
+const routes = require('./server/routes')
+
+// Have every request go through our route middleware
+app.use(routes)
 
 app.listen(port, function() {
   console.log(`Server is running on Port ${port}.`)
