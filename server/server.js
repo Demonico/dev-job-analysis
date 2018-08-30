@@ -12,13 +12,13 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // Set Static folder
-app.use(express.static(path.join(__dirname, '/client/public')))
+app.use(express.static(path.join(__dirname,'..', '/client/public')))
 
 // Connect to the Mongo DB
 mongoose.connect('mongodb://localhost/devjobs')
 
 // Add Routes
-const routes = require('./server/routes')
+const routes = require('./routes')
 
 // Have every request go through our route middleware
 app.use(routes)
